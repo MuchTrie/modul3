@@ -1,15 +1,21 @@
-<!-- Debug Menu Sidebar -->
-<div id="debugMenu" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-    <div class="fixed left-0 top-0 h-full w-64 bg-white shadow-xl transform transition-transform duration-300 -translate-x-full" id="debugSidebar">
+<!-- Wrapper (tetap relatif di konten) -->
+<div id="debugMenu" class="relative z-50">
+
+    <!-- Sidebar -->
+    <div id="debugSidebar"
+         class="fixed md:absolute left-0 top-0 h-full w-64 bg-white shadow-xl border-r transform transition-transform duration-300 -translate-x-full z-50">
+
         <div class="p-6">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="font-bold text-lg">🔧 Debug Menu</h3>
                 <button id="closeMenu" class="p-2 hover:bg-gray-100 rounded-full">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
+
             <div class="space-y-2">
                 <a href="{{ route('events.index') }}" class="flex items-center gap-3 px-4 py-3 {{ Request::routeIs('events.index') ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100' }} rounded-lg font-medium">
                     <span>📅</span>
@@ -36,45 +42,28 @@
     </div>
 </div>
 
+
 @once
 @push('scripts')
 <script>
-    // Debug Menu Toggle
-    document.addEventListener('DOMContentLoaded', function() {
-        const menuToggle = document.getElementById('menuToggle');
-        const debugMenu = document.getElementById('debugMenu');
-        const debugSidebar = document.getElementById('debugSidebar');
-        const closeMenu = document.getElementById('closeMenu');
-        
-        if (menuToggle) {
-            menuToggle.addEventListener('click', () => {
-                debugMenu.classList.remove('hidden');
-                setTimeout(() => {
-                    debugSidebar.classList.remove('-translate-x-full');
-                }, 10);
-            });
-        }
-        
-        if (closeMenu) {
-            closeMenu.addEventListener('click', () => {
-                debugSidebar.classList.add('-translate-x-full');
-                setTimeout(() => {
-                    debugMenu.classList.add('hidden');
-                }, 300);
-            });
-        }
-        
-        if (debugMenu) {
-            debugMenu.addEventListener('click', (e) => {
-                if (e.target === debugMenu) {
-                    debugSidebar.classList.add('-translate-x-full');
-                    setTimeout(() => {
-                        debugMenu.classList.add('hidden');
-                    }, 300);
-                }
-            });
-        }
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menuToggle');
+    const debugSidebar = document.getElementById('debugSidebar');
+    const closeMenu = document.getElementById('closeMenu');
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            debugSidebar.classList.remove('-translate-x-full');
+        });
+    }
+
+    if (closeMenu) {
+        closeMenu.addEventListener('click', () => {
+            debugSidebar.classList.add('-translate-x-full');
+        });
+    }
+});
+
 </script>
 @endpush
 @endonce
