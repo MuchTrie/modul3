@@ -31,22 +31,28 @@
                     <span>📋</span>
                     <span>Tambah Acara</span>
                 </a>
+                <a href="{{ route('events.jadwal-solat') }}" class="flex items-center gap-3 px-4 py-3 {{ Request::routeIs('events.jadwal-solat') ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100' }} rounded-lg">
+                    <span>🕌</span>
+                    <span>Jadwal Sholat</span>
+                </a>
+                <a href="{{ route('events.pengajuan-event') }}" class="flex items-center gap-3 px-4 py-3 {{ Request::routeIs('events.pengajuan-event') ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100' }} rounded-lg">
+                    <span>📝</span>
+                    <span>Pengajuan Event</span>
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-@once
-@push('scripts')
 <script>
     // Debug Menu Toggle
     document.addEventListener('DOMContentLoaded', function() {
-        const menuToggle = document.getElementById('menuToggle');
-        const debugMenu = document.getElementById('debugMenu');
+        const menuToggle   = document.getElementById('menuToggle');
+        const debugMenu    = document.getElementById('debugMenu');
         const debugSidebar = document.getElementById('debugSidebar');
-        const closeMenu = document.getElementById('closeMenu');
-        
-        if (menuToggle) {
+        const closeMenu    = document.getElementById('closeMenu');
+
+        if (menuToggle && debugMenu && debugSidebar) {
             menuToggle.addEventListener('click', () => {
                 debugMenu.classList.remove('hidden');
                 setTimeout(() => {
@@ -54,8 +60,8 @@
                 }, 10);
             });
         }
-        
-        if (closeMenu) {
+
+        if (closeMenu && debugMenu && debugSidebar) {
             closeMenu.addEventListener('click', () => {
                 debugSidebar.classList.add('-translate-x-full');
                 setTimeout(() => {
@@ -63,8 +69,8 @@
                 }, 300);
             });
         }
-        
-        if (debugMenu) {
+
+        if (debugMenu && debugSidebar) {
             debugMenu.addEventListener('click', (e) => {
                 if (e.target === debugMenu) {
                     debugSidebar.classList.add('-translate-x-full');
@@ -76,5 +82,3 @@
         }
     });
 </script>
-@endpush
-@endonce

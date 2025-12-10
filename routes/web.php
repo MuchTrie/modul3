@@ -17,3 +17,15 @@ Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show'
 
 // Kehadiran Jamaah
 Route::get('/events/{id}/attendance', [EventController::class, 'attendance'])->name('events.attendance');
+
+Route::get('/jadwal-sholat', function () {
+    return view('events.jadwal-solat');
+})->name('events.jadwal-solat');
+
+Route::get('/pengajuan-event', function () {
+    return view('events.pengajuan-event');
+})->name('events.pengajuan-event');
+
+
+
+
