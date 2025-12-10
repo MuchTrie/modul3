@@ -112,5 +112,22 @@ public function store(Request $request)
     }
 
     
-    
+     public function pengajuan()
+    {
+        // Ambil semua event dari DB
+        $pengajuanEvents = Event::all()->map(function($event) {
+            return [
+                'id_jemaah'   => $event->event_id,
+                'judul'       => $event->nama_kegiatan,
+                'deskripsi'   => $event->description ?? '-',
+                'rule_usulan' => $event->rule ?? '-',
+                'tgl_mulai'   => $event->start_at,
+                'tgl_selesai' => $event->end_at,
+                'status'      => $event->status,
+                'catatan'     => '-', // bisa diisi kolom lain kalau ada
+            ];
+        });
+
+        return view('events.pengajuan-event', compact('pengajuanEvents'));
+    }
 }

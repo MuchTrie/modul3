@@ -43,3 +43,10 @@ Route::get('/attendance', [EventController::class, 'attendanceList'])
 // Halaman absensi per event
 Route::get('/attendance/{event}', [EventController::class, 'attendance'])
     ->name('attendance.show');
+
+Route::get('/jadwal-sholat', function () {
+    return view('events.jadwal-solat');
+})->name('events.jadwal-solat');
+
+Route::get('/pengajuan-event', [EventController::class, 'pengajuan'])
+    ->name('events.pengajuan-event');
