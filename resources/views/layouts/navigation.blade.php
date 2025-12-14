@@ -13,13 +13,15 @@
                 <!-- Navigation Links (Only for authenticated users) -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     @auth
-                        <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                        
-                        <x-nav-link :href="route('events.index')" :active="request()->routeIs('events.*')">
-                            {{ __('Event') }}
-                        </x-nav-link>
+                        @if(Auth::user()->role !== 'panitia')
+                            <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                                {{ __('Dashboard') }}
+                            </x-nav-link>
+                            
+                            <x-nav-link :href="route('events.index')" :active="request()->routeIs('events.*')">
+                                {{ __('Event') }}
+                            </x-nav-link>
+                        @endif
 
                         @if(Auth::user()->role === 'admin')
                             <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
@@ -30,12 +32,6 @@
                         @if(Auth::user()->role === 'dkm' || Auth::user()->role === 'admin')
                             <x-nav-link :href="route('dkm.approvals')" :active="request()->routeIs('dkm.approvals')">
                                 {{ __('Approval Event') }}
-                            </x-nav-link>
-                        @endif
-
-                        @if(Auth::user()->role === 'panitia')
-                            <x-nav-link :href="route('events.create')" :active="request()->routeIs('events.create')">
-                                {{ __('Buat Event') }}
                             </x-nav-link>
                         @endif
                     @endauth
@@ -99,15 +95,17 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            
-            <x-responsive-nav-link :href="route('events.index')" :active="request()->routeIs('events.*')">
-                {{ __('Event') }}
-            </x-responsive-nav-link>
-
             @auth
+                @if(Auth::user()->role !== 'panitia')
+                    <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-responsive-nav-link>
+                    
+                    <x-responsive-nav-link :href="route('events.index')" :active="request()->routeIs('events.*')">
+                        {{ __('Event') }}
+                    </x-responsive-nav-link>
+                @endif
+
                 @if(Auth::user()->role === 'admin')
                     <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                         {{ __('Kelola User') }}
@@ -117,12 +115,6 @@
                 @if(Auth::user()->role === 'dkm' || Auth::user()->role === 'admin')
                     <x-responsive-nav-link :href="route('dkm.approvals')" :active="request()->routeIs('dkm.approvals')">
                         {{ __('Approval Event') }}
-                    </x-responsive-nav-link>
-                @endif
-
-                @if(Auth::user()->role === 'panitia')
-                    <x-responsive-nav-link :href="route('events.create')" :active="request()->routeIs('events.create')">
-                        {{ __('Buat Event') }}
                     </x-responsive-nav-link>
                 @endif
             @endauth

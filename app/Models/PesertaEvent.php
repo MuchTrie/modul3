@@ -33,6 +33,11 @@ class PesertaEvent extends Model
         return $this->belongsTo(User::class, 'jemaah_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'jemaah_id');
+    }
+
     public function sesiEvent()
     {
         return $this->belongsTo(SesiEvent::class, 'sesi_event_id', 'sesi_event_id');

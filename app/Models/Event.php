@@ -49,6 +49,18 @@ class Event extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
+    public function peserta()
+    {
+        return $this->hasManyThrough(
+            PesertaEvent::class,
+            SesiEvent::class,
+            'event_id',
+            'sesi_event_id',
+            'event_id',
+            'sesi_event_id'
+        );
+    }
+
     // Get count of participants for this event
     public function getPesertaAttribute()
     {

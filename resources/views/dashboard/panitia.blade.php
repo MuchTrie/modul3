@@ -11,7 +11,7 @@
                         <div>
                             <h3 class="text-2xl font-bold text-gray-800">Selamat Datang, Panitia!</h3>
                             <p class="text-sm text-gray-600">{{ Auth::user()->nama_lengkap }}</p>
-                            <p class="text-xs text-gray-500 mt-1">Role: Event Creator - Submit events for DKM approval</p>
+                            <p class="text-xs text-gray-500 mt-1">Role: panitia</p>
                         </div>
                         <div class="text-right">
                             <div class="text-sm text-gray-600">{{ now()->isoFormat('dddd, D MMMM Y') }}</div>
@@ -34,7 +34,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">Total Event</p>
-                                <p class="text-2xl font-bold text-gray-900">{{ auth()->user()->events()->count() }}</p>
+                                <p class="text-2xl font-bold text-gray-900">{{ $events->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">Pending</p>
-                                <p class="text-2xl font-bold text-yellow-600">{{ auth()->user()->events()->where('status', 'draft')->count() }}</p>
+                                <p class="text-2xl font-bold text-yellow-600">{{ $events->where('status', 'draft')->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">Approved</p>
-                                <p class="text-2xl font-bold text-gray-900">{{ auth()->user()->events()->where('status', 'published')->count() }}</p>
+                                <p class="text-2xl font-bold text-gray-900">{{ $events->where('status', 'published')->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                             </div>
                             <div class="ml-4">
                                 <p class="text-sm font-medium text-gray-600">Cancelled</p>
-                                <p class="text-2xl font-bold text-gray-900">{{ auth()->user()->events()->where('status', 'cancelled')->count() }}</p>
+                                <p class="text-2xl font-bold text-gray-900">{{ $events->where('status', 'cancelled')->count() }}</p>
                             </div>
                         </div>
                     </div>
@@ -96,8 +96,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <a href="{{ route('events.create') }}" class="flex items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button type="button" onclick="window.location.href='{{ route('events.create') }}'" class="w-full flex items-center p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-left">
                             <svg class="w-8 h-8 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
@@ -105,9 +105,9 @@
                                 <p class="font-semibold text-gray-800">Ajukan Event Baru</p>
                                 <p class="text-sm text-gray-600">Submit event untuk approval</p>
                             </div>
-                        </a>
+                        </button>
 
-                        <a href="{{ route('events.index') }}" class="flex items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition">
+                        <button type="button" onclick="window.location.href='{{ route('events.mine') }}'" class="w-full flex items-center p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-left">
                             <svg class="w-8 h-8 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                             </svg>
@@ -115,13 +115,33 @@
                                 <p class="font-semibold text-gray-800">Lihat Semua Event</p>
                                 <p class="text-sm text-gray-600">Kelola event saya</p>
                             </div>
-                        </a>
+                        </button>
+
+                        <button type="button" onclick="window.location.href='{{ route('events.manage-participants') }}'" class="w-full flex items-center p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition text-left">
+                            <svg class="w-8 h-8 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z"></path>
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-800">Daftar Jamaah</p>
+                                <p class="text-sm text-gray-600">Kelola peserta event</p>
+                            </div>
+                        </button>
+
+                        <button type="button" onclick="window.location.href='{{ route('events.manage-participants') }}'" class="w-full flex items-center p-4 bg-orange-50 hover:bg-orange-100 rounded-lg transition text-left" title="Absen Kegiatan">
+                            <svg class="w-8 h-8 text-orange-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-800">Absen Kegiatan</p>
+                                <p class="text-sm text-gray-600">Catat kehadiran jamaah</p>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- Info Message -->
-            @if(auth()->user()->events()->count() > 0)
+            @if($events->count() > 0)
             <!-- My Events Table -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1">
                 <div class="p-6">
@@ -137,7 +157,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach(auth()->user()->events()->latest()->take(5)->get() as $event)
+                                @foreach($events->sortByDesc('start_at')->take(5) as $event)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">{{ $event->nama_kegiatan }}</div>

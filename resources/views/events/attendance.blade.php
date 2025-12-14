@@ -1,86 +1,170 @@
-@extends('layouts.app')
-
-@section('title', 'Kehadiran Jamaah')
-
-@section('content')
-<div class="max-w-md mx-auto bg-white min-h-screen shadow-lg">
-    @include('components.debug-sidebar')
-
-    <!-- Header -->
-    <div class="p-6 border-b">
-        <div class="flex items-center justify-between mb-4">
-            <button id="menuToggle" class="p-2 rounded-full hover:bg-gray-100">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M4 6h16M4 12h16M4 18h16"></path>
+<x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800">
+                Absen Kegiatan: {{ $event->nama_kegiatan }}
+            </h2>
+            <a href="{{ route('panitia.dashboard') }}" class="inline-flex items-center px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-            </button>
+                Kembali
+            </a>
         </div>
+    </x-slot>
 
-        <!-- Nama Event -->
-        <h1 class="text-xl font-bold text-center">{{ $event->title }}</h1>
-
-        <p class="text-center text-gray-500 text-sm mt-1">
-            {{ \Carbon\Carbon::parse($event->start_at)->translatedFormat('d F Y, H:i') }}
-        </p>
-
-        <!-- 🔥 Nama Kegiatan -->
-        @if($event->description)
-        <p class="text-center text-gray-700 text-sm mt-2 font-medium">
-            {{ $event->nama_kegiatan }}
-        </p>
-        @endif
-    </div>
-
-    <!-- Search Bar -->
-    <div class="p-6">
-        <div class="relative">
-            <input type="text" placeholder="Cari Nama"
-                class="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300">
-            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2"
-                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-        </div>
-    </div>
-
-    <!-- Attendance List -->
-    <div class="px-6 pb-6">
-        
-        <!-- 🔥 Judul daftar jamaah -->
-        <h2 class="text-lg font-bold mb-4">Daftar Kehadiran</h2>
-
-        <div class="space-y-3">
-            @for ($i = 1; $i <= 10; $i++)
-            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
-                <div class="flex-shrink-0">
-                    <button class="w-8 h-8 border-2 border-gray-300 rounded-full hover:border-gray-400 transition"></button>
-                </div>
-
-                <div class="flex-1">
-                    <div class="h-5 bg-gray-200 rounded w-3/4"></div>
-                </div>
-
-                <div class="flex-shrink-0">
-                    <div class="w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 13l4 4L19 7"></path>
+    <div class="py-12">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+            <!-- Success Alert -->
+            @if(session('success'))
+                <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
+                    <div class="flex">
+                        <svg class="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                         </svg>
+                        <div>
+                            <p class="font-semibold">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Error Alert -->
+            @if($errors->any())
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
+                    <div class="flex">
+                        <svg class="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                        <div>
+                            <p class="font-semibold mb-2">Terjadi kesalahan:</p>
+                            <ul class="list-disc list-inside">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <!-- Event Info -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-600">Tanggal Kegiatan</p>
+                            <p class="text-lg font-semibold">{{ \Carbon\Carbon::parse($event->start_at)->translatedFormat('d F Y') }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Lokasi</p>
+                            <p class="text-lg font-semibold">{{ $event->lokasi ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Total Peserta</p>
+                            <p class="text-lg font-semibold">{{ $participants->count() }}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            @endfor
+
+            @if($participants->count() > 0)
+            <!-- Attendance Form -->
+            <form id="attendanceForm" action="{{ route('events.mark-attendance', $event->event_id) }}" method="POST">
+                @csrf
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Daftar Kehadiran Jamaah</h3>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No.</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Jamaah</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. HP</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Kehadiran</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($participants as $index => $peserta)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $index + 1 }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm font-medium text-gray-900">{{ $peserta->user->nama_lengkap }}</div>
+                                            <div class="text-xs text-gray-500">{{ $peserta->user->email }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-900">{{ $peserta->user->no_hp ?? '-' }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <input type="hidden" name="attendance[{{ $index }}][peserta_event_id]" value="{{ $peserta->peserta_event_id }}">
+                                            <select name="attendance[{{ $index }}][status_hadir]" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                                <option value="">-- Pilih Status --</option>
+                                                <option value="hadir" {{ $peserta->status_hadir === 'hadir' ? 'selected' : '' }}>Hadir</option>
+                                                <option value="tidak hadir" {{ $peserta->status_hadir === 'tidak hadir' ? 'selected' : '' }}>Tidak Hadir</option>
+                                                <option value="belum diketahui" {{ $peserta->status_hadir === 'belum diketahui' ? 'selected' : '' }}>Belum Diketahui</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-6 flex gap-3">
+                    <button type="submit" id="submitBtn" class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                        <svg id="submitIcon" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span id="submitText">Simpan Absensi</span>
+                    </button>
+                    <a href="{{ route('panitia.dashboard') }}" class="flex-1 inline-flex justify-center items-center px-6 py-3 bg-gray-400 hover:bg-gray-500 text-white font-semibold rounded-lg transition">
+                        Batal
+                    </a>
+                </div>
+            </form>
+
+            <!-- Loading Script -->
+            <script>
+                document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+                    const submitBtn = document.getElementById('submitBtn');
+                    const submitIcon = document.getElementById('submitIcon');
+                    const submitText = document.getElementById('submitText');
+
+                    // Disable button
+                    submitBtn.disabled = true;
+                    
+                    // Change icon to loading spinner
+                    submitIcon.innerHTML = '<svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                    
+                    // Change text
+                    submitText.textContent = 'Menyimpan...';
+                });
+            </script>
+            @else
+            <!-- Empty State -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <div class="text-center py-8">
+                        <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z"></path>
+                        </svg>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Belum Ada Peserta Terdaftar</h3>
+                        <p class="text-gray-600 mb-4">Tidak ada jamaah yang terdaftar untuk kegiatan ini</p>
+                        <a href="{{ route('events.manage-participants') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            Daftar Peserta
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
     </div>
-</div>
-
-<script>
-document.getElementById('menuToggle').addEventListener('click', () => {
-    document.getElementById('debugMenu').classList.toggle('hidden');
-});
-</script>
-
-@endsection
+</x-app-layout>

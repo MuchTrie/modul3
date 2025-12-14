@@ -9,10 +9,30 @@ use Illuminate\Support\Facades\Route;
 
 // Public Routes
 Route::get('/', [EventController::class, 'index'])->name('home');
+Route::get('/jadwal-sholat', [EventController::class, 'jadwalSolat'])->name('jadwal-sholat');
+
+// Panitia Routes - MUST BE BEFORE wildcard {event} route
+Route::middleware(['auth', 'role:panitia'])->group(function () {
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/create-routine', [EventController::class, 'createRoutine'])->name('events.create-routine');
+    Route::post('/events/routine', [EventController::class, 'storeRoutine'])->name('events.store-routine');
+    Route::get('/events/mine', [EventController::class, 'mine'])->name('events.mine');
+    Route::post('/events/{event_id}/cancel', [EventController::class, 'cancel'])->name('events.cancel');
+    Route::get('/events/{event_id}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event_id}', [EventController::class, 'update'])->name('events.update');
+    // Participants management
+    Route::get('/events/manage-participants', [EventController::class, 'manageParticipants'])->name('events.manage-participants');
+    Route::get('/events/{event_id}/participants', [EventController::class, 'eventParticipants'])->name('events.event-participants');
+    Route::post('/events/{event_id}/register-participant', [EventController::class, 'registerParticipant'])->name('events.register-participant');
+    Route::delete('/events/{event_id}/participant/{peserta_event_id}', [EventController::class, 'removeParticipant'])->name('events.remove-participant');
+    // Attendance management
+    Route::get('/events/{event_id}/attendance', [EventController::class, 'attendanceView'])->name('events.attendance');
+    Route::post('/events/{event_id}/attendance/mark', [EventController::class, 'markAttendance'])->name('events.mark-attendance');
+});
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
 Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
-Route::get('/jadwal-sholat', [EventController::class, 'jadwalSolat'])->name('jadwal-sholat');
 
 // Authentication Required Routes
 Route::middleware('auth')->group(function () {
@@ -31,7 +51,9 @@ Route::middleware('auth')->group(function () {
     })->middleware('role:dkm')->name('dkm.dashboard');
 
     Route::get('/panitia/dashboard', function () {
-        return view('dashboard.panitia');
+        $user = \Auth::user();
+        $events = \App\Models\Event::where('created_by', $user->id)->get();
+        return view('dashboard.panitia', compact('events', 'user'));
     })->middleware('role:panitia')->name('panitia.dashboard');
 
     Route::get('/jemaah/dashboard', function () {
@@ -53,13 +75,6 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard');
 });
 
-// Panitia Routes - Can create and submit events
-Route::middleware(['auth', 'role:panitia'])->group(function () {
-    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
-    Route::post('/events', [EventController::class, 'store'])->name('events.store');
-    Route::get('/events/create-routine', [EventController::class, 'createRoutine'])->name('events.create-routine');
-    Route::post('/events/routine', [EventController::class, 'storeRoutine'])->name('events.store-routine');
-});
 
 // Admin & Pengurus Routes - Can manage attendance
 Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
@@ -86,11 +101,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::post('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
 });
 
-// Admin & Panitia Routes - Event Management
-Route::middleware(['auth', 'role:admin,panitia'])->group(function () {
-    Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
-    Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
-    Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+// Admin only - Event Management & Deletion
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::delete('/events/{event_id}', [EventController::class, 'destroy'])->name('admin.events.destroy');
 });
 
 // Admin only - View all events in table
