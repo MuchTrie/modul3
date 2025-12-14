@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -18,8 +19,14 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'nama_lengkap',
         'email',
+        'no_hp',
+        'alamat',
+        'role',
+        'status_aktif',
+        'tanggal_daftar',
         'password',
     ];
 
@@ -41,8 +48,41 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'tanggal_daftar' => 'datetime',
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Check if user has specific role
+     */
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
+
+    /**
+     * Check if user has any of the given roles
+     */
+    public function hasAnyRole(array $roles): bool
+    {
+        return in_array($this->role, $roles);
+    }
+
+    /**
+     * Get peserta_event entries for this user
+     */
+    public function pesertaEvents()
+    {
+        return $this->hasMany(PesertaEvent::class, 'jemaah_id');
+    }
+
+    /**
+     * Get events created by this user (for panitia)
+     */
+    public function events()
+    {
+        return $this->hasMany(Event::class, 'created_by');
+    }
 }
+

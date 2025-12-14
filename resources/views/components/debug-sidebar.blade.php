@@ -37,14 +37,16 @@
                     <span>📋</span>
                     <span>Tambah Acara</span>
                 </a>
-                <a href="{{ route('events.jadwal-solat') }}" class="flex items-center gap-3 px-4 py-3 {{ Request::routeIs('events.jadwal-solat') ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100' }} rounded-lg">
+                {{-- Jadwal Sholat - Nanti akan dipasang API --}}
+                {{-- <a href="{{ route('events.jadwal-solat') }}" class="flex items-center gap-3 px-4 py-3 {{ Request::routeIs('events.jadwal-solat') ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100' }} rounded-lg">
                     <span>🕌</span>
                     <span>Jadwal Sholat</span>
-                </a>
-                <a href="{{ route('events.pengajuan-event') }}" class="flex items-center gap-3 px-4 py-3 {{ Request::routeIs('events.pengajuan-event') ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100' }} rounded-lg">
+                </a> --}}
+                {{-- Pengajuan Event - Belum diimplementasikan --}}
+                {{-- <a href="{{ route('events.pengajuan-event') }}" class="flex items-center gap-3 px-4 py-3 {{ Request::routeIs('events.pengajuan-event') ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100' }} rounded-lg">
                     <span>📝</span>
                     <span>Pengajuan Event</span>
-                </a>
+                </a> --}}
             </div>
         </div>
     </div>

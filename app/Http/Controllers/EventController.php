@@ -23,16 +23,43 @@ public function index(Request $request)
 
     $today = \Carbon\Carbon::today();
 
-    // Ambil 3 event terdekat (published) bulan ini
+    // Ambil event bulan yang dipilih (published)
     $events = Event::where('status', 'published')
                    ->whereMonth('start_at', $month)
                    ->whereYear('start_at', $year)
                    ->orderBy('start_at', 'asc')
-                   ->take(3)
                    ->get();
 
+    // Kegiatan rutin (tidak terikat tanggal spesifik)
+    $kegiatanRutin = [
+        [
+            'nama' => 'Sholat Berjamaah 5 Waktu',
+            'jadwal' => 'Setiap hari',
+            'deskripsi' => 'Sholat wajib berjamaah di masjid',
+            'icon' => 'prayer'
+        ],
+        [
+            'nama' => 'Kajian Rutin Malam Jumat',
+            'jadwal' => 'Setiap Kamis malam, 19:30 WIB',
+            'deskripsi' => 'Kajian Islam dengan tema yang berbeda setiap minggu',
+            'icon' => 'book'
+        ],
+        [
+            'nama' => 'TPA (Taman Pendidikan Al-Quran)',
+            'jadwal' => 'Senin - Jumat, 16:00 - 17:30 WIB',
+            'deskripsi' => 'Belajar membaca Al-Quran untuk anak-anak',
+            'icon' => 'academic'
+        ],
+        [
+            'nama' => 'Tarawih & Tahajud Ramadhan',
+            'jadwal' => 'Setiap bulan Ramadhan',
+            'deskripsi' => 'Sholat tarawih dan tahajud berjamaah',
+            'icon' => 'moon'
+        ],
+    ];
+
     return view('events.index', compact(
-        'currentMonth', 'currentYear', 'daysInMonth', 'startDay', 'monthName', 'today', 'events'
+        'currentMonth', 'currentYear', 'daysInMonth', 'startDay', 'monthName', 'today', 'events', 'kegiatanRutin'
     ));
 }
 
@@ -68,6 +95,7 @@ public function store(Request $request)
     $event->description = $request->description;
     $event->status = $request->status;
     $event->attendees = 0;
+    $event->created_by = auth()->id(); // Track who created the event
 
     // === SIMPAN POSTER ===
     if ($request->hasFile('poster')) {
@@ -129,5 +157,10 @@ public function store(Request $request)
         });
 
         return view('events.pengajuan-event', compact('pengajuanEvents'));
+    }
+
+    public function jadwalSolat()
+    {
+        return view('events.jadwal-solat');
     }
 }

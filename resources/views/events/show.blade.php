@@ -88,20 +88,79 @@
             <p class="text-sm text-gray-600">
                 Peserta Terdaftar:
                 <span class="font-semibold">{{ $event->attendees }}</span> /
-                <span class="font-semibold">{{ $event->kuota }}</span>
+                <span class="font-semibold">{{ $event->kuota ?? '∞' }}</span>
             </p>
         </div>
 
-        <!-- Action Button -->
-        <button
-            class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 px-6 rounded-full 
-                   hover:bg-gray-800 hover:text-white transition flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-            </svg>
-            Daftar
-        </button>
+        <!-- Success/Error Messages -->
+        @if(session('success'))
+        <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+            {{ session('success') }}
+        </div>
+        @endif
+
+        @if(session('error'))
+        <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            {{ session('error') }}
+        </div>
+        @endif
+
+        <!-- Action Buttons for Jemaah -->
+        @auth
+            @if(auth()->user()->role === 'jemaah' && $event->status === 'published')
+                @php
+                    $isRegistered = \App\Models\PesertaEvent::whereHas('sesiEvent', function($q) use ($event) {
+                        $q->where('event_id', $event->event_id);
+                    })->where('jemaah_id', auth()->id())->exists();
+                @endphp
+
+                @if($isRegistered)
+                    <form action="{{ route('events.unregister', $event->event_id) }}" method="POST">
+                        @csrf
+                        <button type="submit" 
+                            class="w-full bg-red-600 text-white font-semibold py-3 px-6 rounded-full 
+                                   hover:bg-red-700 transition flex items-center justify-center gap-2"
+                            onclick="return confirm('Yakin ingin membatalkan pendaftaran?')">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Batal Daftar
+                        </button>
+                    </form>
+                @else
+                    <form action="{{ route('events.register', $event->event_id) }}" method="POST">
+                        @csrf
+                        <button type="submit" 
+                            class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 px-6 rounded-full 
+                                   hover:bg-gray-800 hover:text-white transition flex items-center justify-center gap-2"
+                            @if($event->kuota && $event->attendees >= $event->kuota) disabled @endif>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            @if($event->kuota && $event->attendees >= $event->kuota)
+                                Kuota Penuh
+                            @else
+                                Daftar Event
+                            @endif
+                        </button>
+                    </form>
+                @endif
+            @elseif($event->status === 'draft')
+                <div class="w-full bg-yellow-100 border border-yellow-400 text-yellow-800 font-semibold py-3 px-6 rounded-full text-center">
+                    Event sedang menunggu persetujuan
+                </div>
+            @elseif($event->status === 'cancelled')
+                <div class="w-full bg-red-100 border border-red-400 text-red-800 font-semibold py-3 px-6 rounded-full text-center">
+                    Event ditolak/dibatalkan
+                </div>
+            @endif
+        @else
+            <a href="{{ route('login') }}" 
+               class="w-full bg-white border-2 border-gray-800 text-gray-800 font-semibold py-3 px-6 rounded-full 
+                      hover:bg-gray-800 hover:text-white transition flex items-center justify-center gap-2">
+                Login untuk mendaftar
+            </a>
+        @endauth
     </div>
 
     <!-- MODAL ZOOM IMAGE -->

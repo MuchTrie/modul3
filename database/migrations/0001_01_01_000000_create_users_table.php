@@ -13,12 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('username', 50)->unique();
+            $table->string('nama_lengkap', 255);
+            $table->string('email', 255)->nullable();
+            $table->string('no_hp', 20)->nullable();
+            $table->text('alamat')->nullable();
+            $table->string('password', 255);
+            $table->enum('role', ['jemaah', 'pengurus', 'admin'])->default('jemaah');
+            $table->enum('status_aktif', ['aktif', 'tidak aktif'])->default('aktif');
+            $table->timestamp('tanggal_daftar')->useCurrent();
             $table->timestamps();
+            $table->softDeletes();
+            
+            // Indexes
+            $table->index('username');
+            $table->index('role');
+            $table->index('status_aktif');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

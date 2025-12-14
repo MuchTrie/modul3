@@ -1,52 +1,80 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EventController;
-use App\Http\Controllers\EventAttendanceController;
-// Homepage - Jadwal Kegiatan & Event
-Route::get('/', [EventController::class, 'index'])->name('events.index');
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\RegistrationController;
+use Illuminate\Support\Facades\Route;
 
-// -----------------------
-// Event Management Routes
-// -----------------------
+// Public Routes
+Route::get('/', [EventController::class, 'index'])->name('home');
 
-// Form Tambah Event
-Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+Route::get('/events', [EventController::class, 'index'])->name('events.index');
+Route::get('/events/{event}', [EventController::class, 'show'])->name('events.show');
+Route::get('/jadwal-sholat', [EventController::class, 'jadwalSolat'])->name('jadwal-sholat');
 
-// Simpan Event Baru
-Route::post('/events', [EventController::class, 'store'])->name('events.store');
+// Authentication Required Routes
+Route::middleware('auth')->group(function () {
+    // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-// Form Tambah Acara Rutin
-Route::get('/events/create-routine', [EventController::class, 'createRoutine'])->name('events.create-routine');
+    // Role-based Dashboards
+    Route::get('/admin/dashboard', function () {
+        return view('dashboard.admin');
+    })->middleware('role:admin')->name('admin.dashboard');
 
-// Simpan Acara Rutin
-Route::post('/events/routine', [EventController::class, 'storeRoutine'])->name('events.store-routine');
+    Route::get('/pengurus/dashboard', function () {
+        return view('dashboard.pengurus');
+    })->middleware('role:pengurus')->name('pengurus.dashboard');
 
-// Detail Event
-Route::get('/events/{event_id}', [EventController::class, 'show'])->name('events.show');
+    Route::get('/panitia/dashboard', function () {
+        return view('dashboard.panitia');
+    })->middleware('role:panitia')->name('panitia.dashboard');
 
-// Edit Event
-Route::get('/events/{event}/edit', [EventController::class, 'edit'])->name('events.edit');
+    Route::get('/jemaah/dashboard', function () {
+        return view('dashboard.jemaah');
+    })->middleware('role:jemaah')->name('jemaah.dashboard');
 
-// Update Event
-Route::put('/events/{event}', [EventController::class, 'update'])->name('events.update');
+    // Legacy dashboard route
+    Route::get('/dashboard', function () {
+        return redirect()->route(Auth::user()->role . '.dashboard');
+    })->name('dashboard');
+});
 
-// Hapus Event
-Route::delete('/events/{event}', [EventController::class, 'destroy'])->name('events.destroy');
+// Panitia Routes - Can create and submit events
+Route::middleware(['auth', 'role:panitia'])->group(function () {
+    Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
+    Route::post('/events', [EventController::class, 'store'])->name('events.store');
+    Route::get('/events/create-routine', [EventController::class, 'createRoutine'])->name('events.create-routine');
+    Route::post('/events/routine', [EventController::class, 'storeRoutine'])->name('events.store-routine');
+});
 
-// Kehadiran Jamaah
+// Admin & Pengurus Routes - Can manage attendance
+Route::middleware(['auth', 'role:admin,pengurus'])->group(function () {
+    Route::get('/attendance', [EventController::class, 'attendanceList'])->name('attendance.list');
+    Route::get('/attendance/{event}', [EventController::class, 'attendance'])->name('attendance.show');
+});
 
-// List event (tanpa parameter)
-Route::get('/attendance', [EventController::class, 'attendanceList'])
-    ->name('attendance.list');
+// Admin & Pengurus Routes - Approval system
+Route::middleware(['auth', 'role:pengurus,admin'])->group(function () {
+    Route::get('/pengurus/approvals', [ApprovalController::class, 'index'])->name('pengurus.approvals');
+    Route::post('/pengurus/approve/{event}', [ApprovalController::class, 'approve'])->name('pengurus.approve');
+    Route::post('/pengurus/reject/{event}', [ApprovalController::class, 'reject'])->name('pengurus.reject');
+});
 
-// Halaman absensi per event
-Route::get('/attendance/{event}', [EventController::class, 'attendance'])
-    ->name('attendance.show');
+// Jemaah Routes - Event Registration
+Route::middleware(['auth', 'role:jemaah'])->group(function () {
+    Route::post('/events/{event}/register', [RegistrationController::class, 'register'])->name('events.register');
+    Route::post('/events/{event}/unregister', [RegistrationController::class, 'unregister'])->name('events.unregister');
+});
 
-Route::get('/jadwal-sholat', function () {
-    return view('events.jadwal-solat');
-})->name('events.jadwal-solat');
+// Admin Only Routes - User Management
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('users', UserController::class);
+    Route::post('users/{id}/restore', [UserController::class, 'restore'])->name('users.restore');
+});
 
-Route::get('/pengajuan-event', [EventController::class, 'pengajuan'])
-    ->name('events.pengajuan-event');
+require __DIR__.'/auth.php';
