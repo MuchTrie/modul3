@@ -48,10 +48,10 @@ foreach ($events as $ev) {
     <div class="bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 border-t-8 border-b-8 border-emerald-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
             <div class="text-center bg-white/10 backdrop-blur-sm rounded-3xl py-12 px-8 shadow-2xl">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-gray-900">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 text-white">
                     Selamat Datang di Masjid Al-Nassr
                 </h1>
-                <p class="text-lg md:text-xl text-gray-800 font-medium mb-0 max-w-3xl mx-auto leading-relaxed">
+                <p class="text-lg md:text-xl text-white font-medium mb-8 max-w-3xl mx-auto leading-relaxed">
                     Pusat kegiatan keagamaan dan kemasyarakatan. Bergabunglah dengan berbagai event dan kegiatan rutin kami untuk mempererat ukhuwah islamiyah.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -360,6 +360,90 @@ foreach ($events as $ev) {
     @keyframes slide-up { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     .animate-slide-up { animation: slide-up 0.5s ease-out; }
 </style>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-gray-100 mt-16 w-full pt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid md:grid-cols-3 gap-8 mb-8">
+            <!-- About -->
+            <div>
+                <h4 class="font-bold text-lg text-white mb-4">Tentang Kami</h4>
+                <p class="text-gray-400 text-sm leading-relaxed mb-4">
+                    Masjid Al-Nassr adalah pusat kegiatan keagamaan dan kemasyarakatan yang melayani masyarakat dengan berbagai program dan event islami.
+                </p>
+                <div class="flex items-center gap-2 text-gray-400 text-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <span>Jl. Masjid Al-Nassr, Indonesia</span>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h4 class="font-bold text-lg text-white mb-4">Menu Cepat</h4>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="{{ route('events.index') }}" class="text-gray-400 hover:text-emerald-400 text-sm flex items-center gap-2 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                            Kalender Event
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('login') }}" class="text-gray-400 hover:text-emerald-400 text-sm flex items-center gap-2 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                            Login
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('register') }}" class="text-gray-400 hover:text-emerald-400 text-sm flex items-center gap-2 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                            Daftar Akun
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div>
+                <h4 class="font-bold text-lg text-white mb-4">Kontak</h4>
+                <ul class="space-y-3">
+                    <li class="flex items-start gap-2 text-gray-400 text-sm">
+                        <svg class="w-5 h-5 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        <span>info@alnassr.com</span>
+                    </li>
+                    <li class="flex items-start gap-2 text-gray-400 text-sm">
+                        <svg class="w-5 h-5 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                        <span>(021) 1234-5678</span>
+                    </li>
+                    <li class="flex items-start gap-2 text-gray-600 text-sm">
+                        <svg class="w-5 h-5 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Senin - Jumat: 08:00 - 17:00</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="pt-8 border-t border-gray-700 text-center">
+            <p class="text-gray-400 font-medium mb-2">© {{ date('Y') }} Masjid Al-Nassr. All rights reserved.</p>
+            <p class="text-sm text-gray-500">Sistem Manajemen Kegiatan Masjid - Dibuat dengan ❤️ untuk kemudahan umat</p>
+        </div>
+    </div>
+</footer>
 @endsection
 
 @push('scripts')
