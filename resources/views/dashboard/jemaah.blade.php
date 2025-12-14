@@ -24,9 +24,9 @@
             </div>
 
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            <div class="flex flex-row gap-4 mb-6 overflow-x-auto">
                 <!-- My Events -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1 min-w-[200px]">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-blue-500 rounded-lg p-3">
@@ -45,7 +45,7 @@
                 </div>
 
                 <!-- Available Events -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1 min-w-[200px]">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-green-500 rounded-lg p-3">
@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- Total Events -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1 min-w-[200px]">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-purple-500 rounded-lg p-3">
@@ -172,7 +172,7 @@
             </div>
 
             <!-- Upcoming Events -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1">
                 <div class="p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold text-gray-800">Event Yang Akan Datang</h3>

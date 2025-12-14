@@ -24,9 +24,9 @@
             </div>
 
             <!-- Statistics Cards -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <div class="flex flex-row gap-4 mb-6 overflow-x-auto">
                 <!-- My Events -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1 min-w-[200px]">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-blue-500 rounded-lg p-3">
@@ -43,7 +43,7 @@
                 </div>
 
                 <!-- Pending Events -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1 min-w-[200px]">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-yellow-500 rounded-lg p-3">
@@ -60,7 +60,7 @@
                 </div>
 
                 <!-- Approved Events -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1 min-w-[200px]">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-green-500 rounded-lg p-3">
@@ -77,7 +77,7 @@
                 </div>
 
                 <!-- Cancelled Events -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1 min-w-[200px]">
                     <div class="p-6">
                         <div class="flex items-center">
                             <div class="flex-shrink-0 bg-red-500 rounded-lg p-3">
@@ -125,7 +125,7 @@
             <!-- Info Message -->
             @if(auth()->user()->events()->count() > 0)
             <!-- My Events Table -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Event Saya (Terbaru)</h3>
                     <div class="overflow-x-auto">
