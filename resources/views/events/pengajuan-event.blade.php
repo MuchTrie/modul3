@@ -245,7 +245,7 @@
                                 $status = $event['status'];
                                 $badgeClass = $status === 'Pending'
                                     ? 'badge-yellow'
-                                    : ($status === 'Disetujui' ? 'badge-green' : 'badge-red');
+                                    : ($status === 'Disetujui' ? 'badge-green' : 'badge-green');
                             @endphp
                             <span class="badge {{ $badgeClass }}">{{ $status }}</span>
                         </td>

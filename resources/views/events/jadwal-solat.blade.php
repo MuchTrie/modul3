@@ -376,7 +376,7 @@
                 <span></span>
             </div>
             <div class="title-wrapper">
-                <h1 class="title-main">Jadwal Sholat</h1>
+                <h1 class="title-main">Jadwal Sholat Berjamaah</h1>
                 <p class="title-sub">Masjid Al-Nassr</p>
             </div>
         </div>
