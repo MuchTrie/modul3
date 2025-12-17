@@ -220,6 +220,218 @@
                     </div>
                 </div>
             </div>
+            <!-- Kalender & Jadwal Sholat (Smooth) -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-6">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800">Kalender & Jadwal Sholat</h3>
+                            <p class="text-sm text-gray-600">Masjid Al-Nassr</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-600">{{ now()->translatedFormat('l, j F Y') }}</div>
+                            <div class="text-xs text-gray-500">{{ now()->format('H:i') }} WIB</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-5 gap-4">
+                        {{-- KALENDER --}}
+                        <div class="xl:col-span-3 bg-gray-50 rounded-2xl p-4">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="font-semibold text-gray-800">{{ $monthName }}</div>
+
+                                <div class="flex items-center gap-2">
+                                    <a
+                                        href="{{ route('jemaah.dashboard', ['date' => $prevMonth->format('Y-m-d')]) }}"
+                                        class="w-8 h-8 inline-flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-100"
+                                        title="Bulan sebelumnya"
+                                    >
+                                        ‹
+                                    </a>
+
+                                    @if($canGoNext)
+                                        <a
+                                            href="{{ route('jemaah.dashboard', ['date' => $nextMonth->format('Y-m-d')]) }}"
+                                            class="w-8 h-8 inline-flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-600 hover:bg-gray-100"
+                                            title="Bulan berikutnya"
+                                        >
+                                            ›
+                                        </a>
+                                    @else
+                                        <span
+                                            class="w-8 h-8 inline-flex items-center justify-center rounded-full bg-white border border-gray-200 text-gray-300 cursor-not-allowed"
+                                            title="Tidak bisa lanjut"
+                                        >
+                                            ›
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            {{-- Nama hari --}}
+                            <div class="grid grid-cols-7 text-center text-xs text-gray-400 mb-2">
+                                <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
+                            </div>
+
+                            {{-- Grid tanggal --}}
+                            <div class="grid grid-cols-7 gap-2">
+                                @for ($i = 0; $i < $firstDayWeekIndex; $i++)
+                                    <div class="h-10"></div>
+                                @endfor
+
+                                @for ($day = 1; $day <= $daysInMonth; $day++)
+                                    @php
+                                        $thisDate = $monthStart->copy()->setDay($day)->startOfDay();
+
+                                        $isSelected = $thisDate->format('Y-m-d') === $selectedDate->format('Y-m-d');
+                                        $isToday    = $thisDate->format('Y-m-d') === $today->format('Y-m-d');
+
+                                        $btnClass = 'h-10 w-full rounded-xl bg-white border border-gray-200 text-sm text-gray-800 shadow-sm hover:bg-gray-100 flex items-center justify-center';
+                                        if ($isSelected) $btnClass = 'h-10 w-full rounded-xl bg-gray-900 text-white text-sm font-semibold flex items-center justify-center';
+                                        elseif ($isToday) $btnClass = 'h-10 w-full rounded-xl bg-white border-2 border-gray-900 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 flex items-center justify-center';
+                                    @endphp
+
+                                    <button
+                                        type="button"
+                                        data-date="{{ $thisDate->format('Y-m-d') }}"
+                                        class="js-sholat-day {{ $btnClass }}"
+                                        title="{{ $thisDate->translatedFormat('j F Y') }}"
+                                    >
+                                        {{ $day }}
+                                    </button>
+                                @endfor
+                            </div>
+                        </div>
+
+                        {{-- JADWAL SHOLAT --}}
+                        <div class="xl:col-span-2 bg-gray-50 rounded-2xl p-4">
+                            <div class="mb-3">
+                                <div class="flex items-center justify-between">
+                                    <p class="font-semibold text-gray-800">Jadwal Sholat</p>
+                                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-900 text-white text-xs">
+                                        <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                                        Tanggal dipilih
+                                    </span>
+                                </div>
+
+                                <p id="js-fullDate" class="text-sm text-gray-600 mt-1">{{ $fullDate }}</p>
+
+                                @if(!empty($apiError))
+                                    <div id="js-apiError" class="mt-3 p-3 rounded-xl bg-white border border-red-200 text-red-700 text-sm">
+                                        {{ $apiError }}
+                                    </div>
+                                @else
+                                    <div id="js-apiError" class="hidden mt-3 p-3 rounded-xl bg-white border border-red-200 text-red-700 text-sm"></div>
+                                @endif
+                            </div>
+
+                            <div id="js-jadwalList" class="space-y-2">
+                                @foreach ($jadwalSholat as $nama => $jam)
+                                    <div class="flex items-center justify-between p-3 rounded-xl bg-white border border-gray-200 shadow-sm">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-semibold text-gray-800">{{ $nama }}</span>
+                                            <span class="text-xs text-gray-400">Masjid Al-Nassr</span>
+                                        </div>
+                                        <div class="text-sm font-semibold text-gray-900">{{ $jam }}</div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {{-- JS Smooth Update --}}
+            <script>
+            document.addEventListener('DOMContentLoaded', () => {
+              const buttons = document.querySelectorAll('.js-sholat-day');
+              const fullDateEl = document.getElementById('js-fullDate');
+              const listEl = document.getElementById('js-jadwalList');
+              const errEl = document.getElementById('js-apiError');
+
+              let activeBtn = null;
+
+              function setLoading(state) {
+                if (!listEl) return;
+                if (state) {
+                  listEl.style.opacity = '0.6';
+                  listEl.style.pointerEvents = 'none';
+                } else {
+                  listEl.style.opacity = '1';
+                  listEl.style.pointerEvents = 'auto';
+                }
+              }
+
+              function renderList(jadwal) {
+                const entries = Object.entries(jadwal || {});
+                if (!entries.length) {
+                  listEl.innerHTML = `<div class="text-sm text-gray-500">Tidak ada data jadwal.</div>`;
+                  return;
+                }
+
+                listEl.innerHTML = entries.map(([nama, jam]) => `
+                  <div class="flex items-center justify-between p-3 rounded-xl bg-white border border-gray-200 shadow-sm">
+                    <div class="flex flex-col">
+                      <span class="text-sm font-semibold text-gray-800">${nama}</span>
+                      <span class="text-xs text-gray-400">Masjid Al-Nassr</span>
+                    </div>
+                    <div class="text-sm font-semibold text-gray-900">${jam}</div>
+                  </div>
+                `).join('');
+              }
+
+              async function fetchSholat(date) {
+                setLoading(true);
+                try {
+                  const res = await fetch(`{{ route('jemaah.dashboard.sholat') }}?date=${encodeURIComponent(date)}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                  });
+
+                  const data = await res.json();
+
+                  if (fullDateEl) fullDateEl.textContent = data.fullDate || '';
+
+                  if (data.apiError) {
+                    errEl.classList.remove('hidden');
+                    errEl.textContent = data.apiError;
+                  } else {
+                    errEl.classList.add('hidden');
+                    errEl.textContent = '';
+                  }
+
+                  renderList(data.jadwalSholat);
+                } catch (e) {
+                  errEl.classList.remove('hidden');
+                  errEl.textContent = 'Gagal memuat jadwal (cek koneksi / API).';
+                } finally {
+                  setLoading(false);
+                }
+              }
+
+              buttons.forEach(btn => {
+                btn.addEventListener('click', async () => {
+                  const date = btn.dataset.date;
+
+                  // highlight tombol yang dipilih
+                  if (activeBtn) activeBtn.classList.remove('ring-2', 'ring-gray-900');
+                  btn.classList.add('ring-2', 'ring-gray-900');
+                  activeBtn = btn;
+
+                  await fetchSholat(date);
+                });
+              });
+
+              // auto highlight tanggal yang pertama kali dipilih (optional)
+              // cari tombol yang date nya sama dengan selectedDate dari server
+              const initial = `{{ $selectedDate->format('Y-m-d') }}`;
+              const initBtn = Array.from(buttons).find(b => b.dataset.date === initial);
+              if (initBtn) {
+                initBtn.classList.add('ring-2', 'ring-gray-900');
+                activeBtn = initBtn;
+              }
+            });
+            </script>
         </div>
     </div>
 </x-app-layout>

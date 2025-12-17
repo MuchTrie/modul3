@@ -5,6 +5,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ApprovalController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\JemaahDashboardController;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -115,5 +116,13 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('events/create', [EventController::class, 'adminCreate'])->name('events.create');
     Route::post('events', [EventController::class, 'adminStore'])->name('events.store');
 });
+
+
+Route::get('/jemaah/dashboard', [JemaahDashboardController::class, 'index'])
+    ->name('jemaah.dashboard');
+
+Route::get('/jemaah/dashboard/sholat', [JemaahDashboardController::class, 'sholatJson'])
+    ->name('jemaah.dashboard.sholat');
+
 
 require __DIR__.'/auth.php';
