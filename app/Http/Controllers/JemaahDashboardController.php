@@ -70,22 +70,23 @@ class JemaahDashboardController extends Controller
 
     private function fetchSholatTimings(Carbon $date): array
     {
-        // UBAH sesuai kebutuhan
-        $city = 'Bandung';
-        $country = 'Indonesia';
-
         $jadwalSholat = [
             'Subuh' => '-', 'Dzuhur' => '-', 'Ashar' => '-', 'Maghrib' => '-', 'Isya' => '-',
         ];
         $apiError = null;
 
         try {
-            $url = 'https://api.aladhan.com/v1/timingsByCity/' . $date->format('d-m-Y');
+            // Koordinat Bandung (sesuaikan dengan lokasi masjid)
+            $latitude = -6.9271;  // Latitude Bandung
+            $longitude = 107.6411; // Longitude Bandung
+            
+            $url = 'https://api.aladhan.com/v1/timings/' . $date->format('d-m-Y');
 
             $res = Http::timeout(10)->get($url, [
-                'city' => $city,
-                'country' => $country,
-                'method' => 11,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+                'method' => 2, // ISNA method
+                'tune' => '0,0,0,0,0,0,0,0,3'
             ]);
 
             if (!$res->successful()) {
@@ -109,7 +110,15 @@ class JemaahDashboardController extends Controller
 
             return [$jadwalSholat, null];
         } catch (\Throwable $e) {
-            return [$jadwalSholat, 'Gagal mengambil jadwal sholat: ' . $e->getMessage()];
+            // Fallback ke default jika error
+            $jadwalSholat = [
+                'Subuh' => '05:15',
+                'Dzuhur' => '12:15',
+                'Ashar' => '15:30',
+                'Maghrib' => '17:50',
+                'Isya' => '19:00',
+            ];
+            return [$jadwalSholat, 'Menggunakan jadwal default (API tidak tersedia)'];
         }
     }
 }
