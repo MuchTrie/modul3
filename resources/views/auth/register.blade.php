@@ -6,21 +6,21 @@
     <title>Register - Masjid Al-Nassr</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-emerald-700 via-teal-700 to-cyan-700">
+<body class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-700 via-blue-600 to-cyan-600">
     <div class="w-full max-w-md">
         <!-- Card Container -->
         <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
             
             <!-- Header Section -->
-            <div class="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 relative">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-6 relative">
                 <!-- Back Button -->
-                <a href="{{ route('login') }}" class="absolute left-4 top-4 text-white hover:text-emerald-100">
+                <a href="{{ route('login') }}" class="absolute left-4 top-4 text-white hover:text-blue-100">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                 </a>
                 <h1 class="text-2xl font-bold text-white text-center">Daftar Akun</h1>
-                <p class="text-emerald-50 text-sm text-center mt-2">Buat Akun Barumu</p>
+                <p class="text-blue-50 text-sm text-center mt-2">Buat Akun Barumu</p>
             </div>
 
             <!-- Form Section -->
@@ -41,7 +41,7 @@
                                 type="text" 
                                 name="username" 
                                 value="{{ old('username') }}"
-                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition @error('username') border-red-500 @enderror" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('username') border-red-500 @enderror" 
                                 placeholder="Username"
                                 required 
                                 autofocus
@@ -65,7 +65,7 @@
                                 type="text" 
                                 name="nama_lengkap" 
                                 value="{{ old('nama_lengkap') }}"
-                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition @error('nama_lengkap') border-red-500 @enderror" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('nama_lengkap') border-red-500 @enderror" 
                                 placeholder="Nama Lengkap"
                                 required
                             >
@@ -88,7 +88,7 @@
                                 type="tel" 
                                 name="no_hp" 
                                 value="{{ old('no_hp') }}"
-                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition @error('no_hp') border-red-500 @enderror" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('no_hp') border-red-500 @enderror" 
                                 placeholder="Nomor Telp"
                             >
                         </div>
@@ -110,7 +110,7 @@
                                 id="alamat" 
                                 name="alamat" 
                                 rows="2"
-                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition @error('alamat') border-red-500 @enderror" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('alamat') border-red-500 @enderror" 
                                 placeholder="Alamat"
                             >{{ old('alamat') }}</textarea>
                         </div>
@@ -131,7 +131,7 @@
                                 id="password" 
                                 type="password" 
                                 name="password" 
-                                class="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition @error('password') border-red-500 @enderror" 
+                                class="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('password') border-red-500 @enderror" 
                                 placeholder="Kata Sandi"
                                 required
                             >
@@ -163,7 +163,7 @@
                                 id="password_confirmation" 
                                 type="password" 
                                 name="password_confirmation" 
-                                class="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition" 
+                                class="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition" 
                                 placeholder="Verifikasi Kata Sandi"
                                 required
                             >
@@ -183,7 +183,7 @@
                     <!-- Register Button -->
                     <button 
                         type="submit" 
-                        class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl mb-4"
+                        class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl mb-4"
                     >
                         Daftar
                     </button>
@@ -191,7 +191,7 @@
                     <!-- Login Link -->
                     <div class="text-center text-sm text-gray-600">
                         Sudah Memiliki Akun? 
-                        <a href="{{ route('login') }}" class="text-emerald-600 hover:text-emerald-700 font-semibold">
+                        <a href="{{ route('login') }}" class="text-blue-600 hover:text-blue-700 font-semibold">
                             Login
                         </a>
                     </div>

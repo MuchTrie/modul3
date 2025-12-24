@@ -109,11 +109,8 @@
             <!-- My Events Table -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="mb-4">
                         <h3 class="text-lg font-semibold text-gray-800">Event Yang Saya Ikuti</h3>
-                        <a href="{{ route('jemaah.my-events') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                            Lihat Semua →
-                        </a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -171,11 +168,8 @@
             <!-- Upcoming Events -->
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg flex-1">
                 <div class="p-6">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="mb-4">
                         <h3 class="text-lg font-semibold text-gray-800">Event Yang Akan Datang</h3>
-                        <a href="{{ route('events.index') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
-                            Lihat Semua →
-                        </a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">

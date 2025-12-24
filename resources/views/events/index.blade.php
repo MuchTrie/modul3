@@ -29,14 +29,9 @@ foreach ($events as $ev) {
 
     $eventsByDate[$day][] = $ev;
 }
-// Ambil 3 event terdekat (yang akan datang)
-    $upcomingEvents = collect($events)
-        ->filter(function($event) {
-            return Carbon::parse($event->start_at)->gte(Carbon::today());
-        })
-        ->sortBy('start_at')
-        ->take(3);
+// $upcomingEvents sudah dikirim dari controller, tidak perlu difilter ulang di sini
 @endphp
+
 
 @extends('layouts.app')
 
@@ -45,9 +40,9 @@ foreach ($events as $ev) {
 @section('content')
 <div class="min-h-screen bg-gray-50">
     <!-- Hero/Jumbotron Section -->
-    <div class="bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 border-t-8 border-b-8 border-emerald-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 lg:py-32">
-            <div class="text-center bg-white/10 backdrop-blur-sm rounded-3xl py-8 md:py-12 px-4 md:px-8 shadow-2xl">
+    <div class="bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-600 border-t-8 border-b-8 border-blue-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-32">
+            <div class="text-center bg-white/10 backdrop-blur-sm rounded-3xl py-10 md:py-14 px-6 md:px-10 shadow-2xl">
                 <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold mb-4 md:mb-6 text-white">
                     Selamat Datang di Masjid Al-Nassr
                 </h1>
@@ -55,14 +50,14 @@ foreach ($events as $ev) {
                     Pusat kegiatan keagamaan dan kemasyarakatan. Bergabunglah dengan berbagai event dan kegiatan rutin kami untuk mempererat ukhuwah islamiyah.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-                    <a href="#calendar" class="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 border border-transparent text-sm sm:text-base font-medium rounded-lg text-emerald-700 bg-white hover:bg-emerald-50 transition-colors duration-200">
+                    <a href="#calendar" class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 border border-transparent text-sm sm:text-base font-bold rounded-xl text-blue-700 bg-white hover:bg-blue-50 transition-all duration-200 shadow-lg hover:shadow-xl">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                         </svg>
                         Lihat Jadwal Event
                     </a>
                     @guest
-                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-3 border-2 border-white text-sm sm:text-base font-medium rounded-lg text-white hover:bg-white hover:text-emerald-700 transition-colors duration-200">
+                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 border-2 border-white text-sm sm:text-base font-bold rounded-xl text-white hover:bg-white hover:text-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                         </svg>
@@ -81,11 +76,12 @@ foreach ($events as $ev) {
             <!-- Event Terdekat (Left) -->
             <div>
                 <div class="bg-white rounded-2xl shadow-lg p-5 md:p-6 h-full flex flex-col">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-xl font-bold text-gray-900">Event Terdekat</h2>
+                    <div class="flex justify-between items-center mb-5">
+                        <h2 class="text-2xl font-bold text-gray-900">Event Terdekat</h2>
+                        <span class="text-sm text-gray-500">3 Event Mendatang</span>
                     </div>
                     
-                    <div class="space-y-3 flex-1">
+                    <div class="space-y-4 flex-1">
                         @forelse($upcomingEvents as $event)
                             @php
                                 $eventDate = Carbon::parse($event->start_at);
@@ -94,17 +90,17 @@ foreach ($events as $ev) {
                             @endphp
                             
                             <div 
-                                class="bg-gradient-to-br from-white to-gray-50 border-2 border-gray-200 rounded-xl p-4 hover:border-emerald-500 hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                                class="bg-white border-2 border-gray-200 rounded-xl p-4 hover:border-blue-500 hover:shadow-xl transition-all duration-300 cursor-pointer group hover:scale-[1.02]"
                                 data-event='@json($event)'
                                 onclick="openModal(JSON.parse(this.getAttribute('data-event')))"
                             >
                                 <div class="flex gap-4">
                                     <!-- Date Badge -->
-                                    <div class="flex flex-col items-center justify-center bg-emerald-600 rounded-lg p-3 flex-shrink-0 min-w-[70px] group-hover:bg-emerald-700 transition-colors">
+                                    <div class="flex flex-col items-center justify-center bg-blue-600 rounded-lg p-3 flex-shrink-0 min-w-[70px] group-hover:bg-blue-700 transition-colors">
                                         <div class="text-2xl font-bold text-white">
                                             {{ $eventDate->format('d') }}
                                         </div>
-                                        <div class="text-xs text-emerald-100 uppercase font-semibold">
+                                        <div class="text-xs text-blue-100 uppercase font-semibold">
                                             {{ $eventDate->format('M') }}
                                         </div>
                                         @if($isToday)
@@ -120,30 +116,39 @@ foreach ($events as $ev) {
 
                                     <!-- Event Details -->
                                     <div class="flex-1 min-w-0">
-                                        <div class="flex justify-between items-start mb-2">
-                                            <h3 class="font-bold text-gray-900 text-base leading-tight pr-2">
+                                        <div class="flex flex-col gap-1 mb-2">
+                                            <h3 class="font-bold text-gray-900 text-lg leading-tight">
                                                 {{ $event->nama_kegiatan }}
                                             </h3>
-                                            <span class="inline-flex items-center gap-1 text-sm text-emerald-700 font-semibold flex-shrink-0 bg-emerald-50 px-2 py-1 rounded-lg">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                                {{ $eventDate->format('H:i') }}
-                                            </span>
+                                            <div class="flex items-center gap-2">
+                                                <span class="inline-flex items-center gap-1 text-sm text-blue-700 font-semibold bg-blue-50 px-2 py-1 rounded-lg">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    {{ $eventDate->format('H:i') }} WIB
+                                                </span>
+                                                <span class="inline-flex items-center gap-1 text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded-lg">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                    </svg>
+                                                    {{ $event->lokasi ?? 'Masjid Al-Nassr' }}
+                                                </span>
+                                            </div>
                                         </div>
                                         
                                         <p class="text-sm text-gray-600 line-clamp-2 mb-3 leading-relaxed">
                                             {{ Str::limit($event->description ?? 'Tidak ada deskripsi', 90) }}
                                         </p>
                                         
-                                        <div class="flex items-center justify-between pt-2 border-t border-gray-200">
-                                            <div class="flex items-center gap-1.5 text-sm text-gray-600">
-                                                <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+                                            <div class="flex items-center gap-1.5 text-sm text-gray-700 font-medium">
+                                                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                                         d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
                                                     </path>
                                                 </svg>
-                                                
+                                                <span>{{ $event->attendees ?? 0 }} / {{ $event->kuota ?? '∞' }} Peserta</span>
                                             </div>
                                             
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase 
@@ -155,16 +160,26 @@ foreach ($events as $ev) {
                                 </div>
                             </div>
                         @empty
-                            <div class="text-center py-12">
-                                <div class="w-20 h-20 mx-auto mb-4 text-gray-300">
+                            <div class="text-center py-16">
+                                <div class="w-24 h-24 mx-auto mb-4 text-gray-300">
                                     <svg class="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
                                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                                         </path>
                                     </svg>
                                 </div>
-                                <p class="text-gray-600 font-semibold mb-1">Tidak ada event yang akan datang</p>
-                                <p class="text-sm text-gray-400">Cek bulan lainnya untuk melihat event</p>
+                                <p class="text-gray-700 font-bold text-lg mb-2">Tidak ada event yang akan datang</p>
+                                <p class="text-sm text-gray-500 mb-4">Belum ada event yang dijadwalkan dalam waktu dekat</p>
+                                @auth
+                                    @if(auth()->user()->role === 'panitia')
+                                        <a href="{{ route('events.create') }}" class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                                            </svg>
+                                            Buat Event Baru
+                                        </a>
+                                    @endif
+                                @endauth
                             </div>
                         @endforelse
                     </div>
@@ -174,12 +189,12 @@ foreach ($events as $ev) {
             <!-- Kalender (Right) -->
             <div>
                 <div class="bg-white rounded-2xl shadow-lg p-5 md:p-6 h-full">
-                    <h2 class="text-xl font-bold mb-4 text-gray-900">Kalender Event</h2>
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-3">
-                        <div class="text-center mb-3 flex justify-between items-center gap-2">
-                            <form method="GET" class="flex gap-2 w-full justify-center">
+                    <h2 class="text-2xl font-bold mb-5 text-gray-900">Kalender Event</h2>
+                    <div class="bg-gradient-to-br from-blue-50 to-gray-50 rounded-xl p-4 border border-blue-100">
+                        <div class="mb-4">
+                            <form method="GET" class="flex gap-3 justify-center items-center">
                                 {{-- Dropdown Bulan --}}
-                                <select name="month" onchange="this.form.submit()" class="bg-white border-2 border-gray-300 text-gray-900 text-sm font-semibold rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all cursor-pointer hover:border-emerald-400 shadow-sm">
+                                <select name="month" onchange="this.form.submit()" class="bg-white border border-gray-300 text-gray-900 text-base font-medium rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all cursor-pointer hover:border-blue-400 shadow-sm min-w-[140px]">
                                     @foreach($months as $num => $name)
                                         <option value="{{ $num }}" {{ $num == $currentMonth ? 'selected' : '' }}>
                                             {{ $name }}
@@ -187,7 +202,7 @@ foreach ($events as $ev) {
                                     @endforeach
                                 </select>
                                 {{-- Dropdown Tahun --}}
-                                <select name="year" onchange="this.form.submit()" class="bg-white border-2 border-gray-300 text-gray-900 text-sm font-semibold rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all cursor-pointer hover:border-emerald-400 shadow-sm">
+                                <select name="year" onchange="this.form.submit()" class="bg-white border border-gray-300 text-gray-900 text-base font-medium rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all cursor-pointer hover:border-blue-400 shadow-sm min-w-[100px]">
                                     @for ($y = now()->year - 5; $y <= now()->year + 5; $y++)
                                         <option value="{{ $y }}" {{ $y == $currentYear ? 'selected' : '' }}>
                                             {{ $y }}
@@ -198,7 +213,7 @@ foreach ($events as $ev) {
                         </div>
 
                         {{-- Days of Week --}}
-                        <div class="grid grid-cols-7 gap-1 mb-2 text-xs font-bold text-gray-700">
+                        <div class="grid grid-cols-7 gap-1 mb-2 text-sm font-bold text-gray-700">
                             <div class="text-center py-1">M</div>
                             <div class="text-center py-1">S</div>
                             <div class="text-center py-1">S</div>
@@ -219,15 +234,27 @@ foreach ($events as $ev) {
                             @for ($i = 1; $i <= $daysInMonth; $i++)
                                 @php
                                     $hasEvent = isset($eventsByDate[$i]);
+                                    // Cek apakah ada event yang akan datang di tanggal ini
+                                    $hasUpcomingEvent = false;
+                                    if ($hasEvent) {
+                                        foreach ($eventsByDate[$i] as $ev) {
+                                            if (Carbon::parse($ev->start_at)->isFuture() || Carbon::parse($ev->start_at)->isToday()) {
+                                                $hasUpcomingEvent = true;
+                                                break;
+                                            }
+                                        }
+                                    }
                                 @endphp
 
                                 <button 
                                     class="aspect-square rounded-lg p-1 text-sm font-semibold transition-all duration-200
                                     {{ $today->day == $i && $today->month == $currentMonth && $today->year == $currentYear 
-                                        ? 'bg-emerald-600 text-white ring-2 ring-emerald-400 shadow-lg' 
-                                        : ($hasEvent 
-                                            ? 'bg-green-400 text-gray-900 hover:bg-green-500 hover:shadow-md hover:scale-105' 
-                                            : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200') }}"
+                                        ? 'bg-blue-600 text-white ring-2 ring-blue-400 shadow-lg' 
+                                        : ($hasUpcomingEvent 
+                                            ? 'bg-blue-500 text-white hover:bg-blue-600 hover:shadow-md hover:scale-105' 
+                                            : ($hasEvent 
+                                                ? 'bg-gray-300 text-gray-700 hover:bg-gray-400' 
+                                                : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200')) }}"
                                     
                                     @if($hasEvent)
                                         onclick='openCalendarEvent(@json($eventsByDate[$i]))'
@@ -244,7 +271,7 @@ foreach ($events as $ev) {
 
         <!-- Jadwal Sholat (Full Width Below) -->
         <div class="mt-8">
-            <div class="bg-gradient-to-br from-emerald-700 to-teal-700 rounded-2xl shadow-2xl p-6 md:p-8">
+            <div class="bg-gradient-to-br from-blue-700 to-blue-600 rounded-2xl shadow-2xl p-6 md:p-8">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-bold text-white flex items-center gap-2">
                         <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
@@ -252,7 +279,7 @@ foreach ($events as $ev) {
                         </svg>
                         Jadwal Sholat Hari Ini
                     </h2>
-                    <div class="text-sm text-emerald-100 bg-white/20 px-4 py-2 rounded-lg font-semibold backdrop-blur">
+                    <div class="text-sm text-blue-100 bg-white/20 px-4 py-2 rounded-lg font-semibold backdrop-blur">
                         {{ now('Asia/Jakarta')->isoFormat('DD MMM YYYY') }}
                     </div>
                 </div>
@@ -291,7 +318,7 @@ foreach ($events as $ev) {
                             @else
                                 <div class="mb-2 h-6"></div>
                             @endif
-                            <p class="font-bold text-2xl {{ $isNext ? 'text-gray-900' : 'text-emerald-700' }}">{{ $prayerTime }}</p>
+                            <p class="font-bold text-2xl {{ $isNext ? 'text-gray-900' : 'text-blue-700' }}">{{ $prayerTime }}</p>
                             <p class="text-xs {{ $isNext ? 'text-gray-700' : 'text-gray-500' }} font-medium mt-1">WIB</p>
                         </div>
                     @endforeach
@@ -365,24 +392,24 @@ foreach ($events as $ev) {
             <h2 class="text-2xl font-bold mb-6 text-gray-900">Kegiatan Rutin</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 @foreach($kegiatanRutin as $kegiatan)
-                <div class="group hover:bg-emerald-50 transition-all duration-300 flex items-start gap-4 p-5 bg-gray-50 rounded-xl border-2 border-gray-200 hover:border-emerald-400 hover:shadow-lg">
+                <div class="group hover:bg-blue-50 transition-all duration-300 flex items-start gap-4 p-5 bg-gray-50 rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg">
                     <!-- Icon -->
-                    <div class="w-16 h-16 bg-emerald-100 group-hover:bg-emerald-500 rounded-xl flex-shrink-0 flex items-center justify-center transition-all duration-300 shadow-md group-hover:shadow-lg group-hover:scale-110">
+                    <div class="w-16 h-16 bg-blue-100 group-hover:bg-blue-500 rounded-xl flex-shrink-0 flex items-center justify-center transition-all duration-300 shadow-md group-hover:shadow-lg group-hover:scale-110">
                         @if($kegiatan['icon'] === 'prayer')
-                            <svg class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-blue-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                             </svg>
                         @elseif($kegiatan['icon'] === 'book')
-                            <svg class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-blue-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                             </svg>
                         @elseif($kegiatan['icon'] === 'academic')
-                            <svg class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-blue-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
                             </svg>
                         @else
-                            <svg class="w-8 h-8 text-emerald-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-blue-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                             </svg>
                         @endif
@@ -390,8 +417,8 @@ foreach ($events as $ev) {
                     
                     <!-- Content -->
                     <div class="flex-1 min-w-0">
-                        <h3 class="font-bold text-gray-900 mb-2 text-base group-hover:text-emerald-700 transition-colors">{{ $kegiatan['nama'] }}</h3>
-                        <p class="text-sm text-emerald-600 font-semibold mb-2 flex items-center gap-1">
+                        <h3 class="font-bold text-gray-900 mb-2 text-base group-hover:text-blue-700 transition-colors">{{ $kegiatan['nama'] }}</h3>
+                        <p class="text-sm text-blue-600 font-semibold mb-2 flex items-center gap-1">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -443,7 +470,7 @@ foreach ($events as $ev) {
                 <h4 class="font-bold text-lg text-white mb-4">Menu Cepat</h4>
                 <ul class="space-y-3">
                     <li>
-                        <a href="{{ route('events.index') }}" class="text-gray-400 hover:text-emerald-400 text-sm flex items-center gap-2 transition">
+                        <a href="{{ route('events.index') }}" class="text-gray-400 hover:text-blue-400 text-sm flex items-center gap-2 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>
@@ -451,7 +478,7 @@ foreach ($events as $ev) {
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('login') }}" class="text-gray-400 hover:text-emerald-400 text-sm flex items-center gap-2 transition">
+                        <a href="{{ route('login') }}" class="text-gray-400 hover:text-blue-400 text-sm flex items-center gap-2 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>
@@ -459,7 +486,7 @@ foreach ($events as $ev) {
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('register') }}" class="text-gray-400 hover:text-emerald-400 text-sm flex items-center gap-2 transition">
+                        <a href="{{ route('register') }}" class="text-gray-400 hover:text-blue-400 text-sm flex items-center gap-2 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                             </svg>

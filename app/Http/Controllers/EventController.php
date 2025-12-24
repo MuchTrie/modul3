@@ -67,12 +67,20 @@ public function index(Request $request)
 
     $today = \Carbon\Carbon::today();
 
-    // Ambil event bulan yang dipilih (published)
+    // Ambil event bulan yang dipilih untuk kalender (published)
     $events = Event::where('status', 'published')
                    ->whereMonth('start_at', $month)
                    ->whereYear('start_at', $year)
                    ->orderBy('start_at', 'asc')
                    ->get();
+
+    // Ambil 3 event terdekat yang akan datang (untuk section "Event Terdekat")
+    // Tidak terbatas pada bulan yang dipilih di kalender
+    $upcomingEvents = Event::where('status', 'published')
+                           ->where('start_at', '>=', now())
+                           ->orderBy('start_at', 'asc')
+                           ->limit(3)
+                           ->get();
 
     // Get prayer times
     $prayerTimes = $this->getPrayerTimes();
@@ -106,9 +114,10 @@ public function index(Request $request)
     ];
 
     return view('events.index', compact(
-        'currentMonth', 'currentYear', 'daysInMonth', 'startDay', 'monthName', 'today', 'events', 'kegiatanRutin', 'prayerTimes'
+        'currentMonth', 'currentYear', 'daysInMonth', 'startDay', 'monthName', 'today', 'events', 'upcomingEvents', 'kegiatanRutin', 'prayerTimes'
     ));
 }
+
 
 
     public function create()

@@ -6,20 +6,20 @@
     <title>Login - Masjid Al-Nassr</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-emerald-700 via-teal-700 to-cyan-700">
+<body class="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-blue-700 via-blue-600 to-cyan-600">
     <div class="w-full max-w-md">
         <!-- Card Container -->
         <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
             
             <!-- Header Section with Logo -->
-            <div class="bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-center">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 p-8 text-center">
                 <div class="w-24 h-24 mx-auto mb-4 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center">
                     <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                     </svg>
                 </div>
                 <h1 class="text-2xl font-bold text-white mb-2">Masjid Al-Nassr</h1>
-                <p class="text-emerald-50 text-sm">Masuk ke akun anda</p>
+                <p class="text-blue-50 text-sm">Masuk ke akun anda</p>
             </div>
 
             <!-- Form Section -->
@@ -47,7 +47,7 @@
                                 type="text" 
                                 name="username" 
                                 value="{{ old('username') }}"
-                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition @error('username') border-red-500 @enderror" 
+                                class="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('username') border-red-500 @enderror" 
                                 placeholder="Username"
                                 required 
                                 autofocus 
@@ -71,7 +71,7 @@
                                 id="password" 
                                 type="password" 
                                 name="password" 
-                                class="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition @error('password') border-red-500 @enderror" 
+                                class="w-full pl-10 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition @error('password') border-red-500 @enderror" 
                                 placeholder="Kata Sandi"
                                 required 
                                 autocomplete="current-password"
@@ -95,11 +95,11 @@
                     <!-- Remember & Forgot Password -->
                     <div class="flex items-center justify-between mb-6">
                         <label class="flex items-center text-sm text-gray-600">
-                            <input type="checkbox" name="remember" class="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500 mr-2">
+                            <input type="checkbox" name="remember" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500 mr-2">
                             Ingat saya
                         </label>
                         @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-sm text-emerald-600 hover:text-emerald-700 font-medium">
+                            <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:text-blue-700 font-medium">
                                 Lupa Password ?
                             </a>
                         @endif
@@ -108,7 +108,7 @@
                     <!-- Login Button -->
                     <button 
                         type="submit" 
-                        class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl mb-4"
+                        class="w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl mb-4"
                     >
                         Login
                     </button>
@@ -116,7 +116,7 @@
                     <!-- Register Link -->
                     <div class="text-center text-sm text-gray-600">
                         Tidak Memiliki Akun? 
-                        <a href="{{ route('register') }}" class="text-emerald-600 hover:text-emerald-700 font-semibold">
+                        <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-700 font-semibold">
                             Daftar Akun
                         </a>
                     </div>
