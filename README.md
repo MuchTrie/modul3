@@ -2,6 +2,10 @@
 
 Sistem manajemen event masjid dengan role-based access control untuk mengelola kegiatan dan acara masjid.
 
+# Link repository
+
+```https://github.com/MuchTrie/IFB-401_Modul-Event.git```
+
 ## Cara Menjalankan Aplikasi
 
 ### 1. Install Dependencies
